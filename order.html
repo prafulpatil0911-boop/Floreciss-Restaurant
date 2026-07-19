@@ -9,69 +9,72 @@
 
 </head>
 
-<body class="bg-light">
+<div class="card p-3 mt-4">
+    <h3>Customize Your Order</h3>
 
-<div class="container mt-5">
+    <label>Quantity</label>
+    <input type="number" id="qty" value="1" min="1" class="form-control" onchange="calculatePrice()">
 
-<div class="card shadow p-4">
+    <br>
 
-<h2 class="text-center mb-4">Food Order</h2>
+    <label>Spice Level</label>
+    <select id="spice" class="form-control">
+        <option>Mild</option>
+        <option>Medium</option>
+        <option>Spicy</option>
+    </select>
 
-<form onsubmit="placeOrder(event)">
+    <br>
 
-<div class="mb-3">
-<label class="form-label">Food Name</label>
-<input type="text" id="food" class="form-control" readonly>
-</div>
+    <label>
+        <input type="checkbox" id="cheese" onchange="calculatePrice()">
+        Extra Cheese (+₹50)
+    </label>
 
-<div class="mb-3">
-<label class="form-label">Price</label>
-<input type="text" id="price" class="form-control" readonly>
-</div>
+    <br><br>
 
-<div class="mb-3">
-<label class="form-label">Your Name</label>
-<input type="text" class="form-control" required>
-</div>
+    <label>Special Instructions</label>
+    <textarea id="note" class="form-control" placeholder="Example: No Onion"></textarea>
 
-<div class="mb-3">
-<label class="form-label">Phone Number</label>
-<input type="tel" class="form-control" required>
-</div>
+    <br>
 
-<div class="mb-3">
-<label class="form-label">Delivery Address</label>
-<textarea class="form-control" required></textarea>
-</div>
+    <h4>Total: ₹<span id="total">250</span></h4>
 
-<button class="btn btn-danger w-100">
-Confirm Order
-</button>
-
-</form>
-
-</div>
-
+    <button class="btn btn-success mt-2" onclick="placeOrder()">
+        Add To Cart
+    </button>
 </div>
 
 <script>
+let basePrice = 250;
 
-const params = new URLSearchParams(window.location.search);
+function calculatePrice() {
+    let qty = parseInt(document.getElementById("qty").value);
+    let total = basePrice * qty;
 
-document.getElementById("food").value = params.get("food");
+    if(document.getElementById("cheese").checked){
+        total += 50 * qty;
+    }
 
-document.getElementById("price").value = "₹" + params.get("price");
-
-function placeOrder(event){
-
-event.preventDefault();
-
-alert("🎉 Your order has been placed successfully!");
-
-window.location.href = "menu.html";
-
+    document.getElementById("total").innerHTML = total;
 }
 
+function placeOrder() {
+    let qty = document.getElementById("qty").value;
+    let spice = document.getElementById("spice").value;
+    let cheese = document.getElementById("cheese").checked ? "Yes" : "No";
+    let note = document.getElementById("note").value;
+    let total = document.getElementById("total").innerHTML;
+
+    alert(
+        "Order Added!\n\n" +
+        "Quantity: " + qty +
+        "\nSpice: " + spice +
+        "\nExtra Cheese: " + cheese +
+        "\nNote: " + note +
+        "\nTotal: ₹" + total
+    );
+}
 </script>
 
 </body>
